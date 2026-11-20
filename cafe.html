@@ -8,20 +8,27 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ===================================================
-       대시보드 스타일시트 (Embedded Style for Single-File Distribution)
+       대시보드 스타일시트 (Embedded Responsive Stylesheet)
        =================================================== */
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --primary-light: #eff6ff;
+      --accent: #10b981;
+      --accent-light: #ecfdf5;
+      --warning: #f59e0b;
+      --danger: #ef4444;
       --bg: #f8fafc;
       --surface: #ffffff;
       --border: #e2e8f0;
+      --border-dark: #cbd5e1;
       --text: #0f172a;
       --text-muted: #64748b;
-      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 10px rgba(15, 23, 42, 0.06);
     }
 
     * {
@@ -36,10 +43,12 @@
       color: var(--text);
       line-height: 1.5;
       padding: 24px 16px;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
     .dashboard-container {
-      max-width: 1180px;
+      max-width: 1200px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -50,7 +59,7 @@
     .dashboard-header {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       padding: 24px 28px;
       box-shadow: var(--shadow-sm);
       display: flex;
@@ -67,26 +76,27 @@
     }
 
     .cafe-icon {
-      font-size: 2.5rem;
+      font-size: 2.6rem;
       background: #fef3c7;
-      border-radius: 16px;
-      width: 58px;
-      height: 58px;
+      border-radius: 18px;
+      width: 60px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .header-title {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--text);
+      line-height: 1.3;
     }
 
     .header-sub {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .header-badge {
@@ -95,7 +105,7 @@
       gap: 6px;
       background: var(--primary-light);
       color: var(--primary-dark);
-      padding: 6px 14px;
+      padding: 7px 16px;
       border-radius: 9999px;
       font-size: 0.85rem;
       font-weight: 600;
@@ -112,17 +122,23 @@
     .kpi-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       padding: 20px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .kpi-label {
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       display: flex;
       align-items: center;
@@ -130,7 +146,7 @@
     }
 
     .kpi-value {
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--text);
       letter-spacing: -0.5px;
@@ -141,27 +157,27 @@
       color: #94a3b8;
     }
 
-    /* 3. Charts & Table Grid */
+    /* 3. Section Common */
     .section-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       padding: 24px;
       box-shadow: var(--shadow-sm);
     }
 
     .section-header {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
     }
 
     .section-title {
-      font-size: 1.18rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--text);
       display: flex;
       align-items: center;
@@ -173,28 +189,155 @@
       color: var(--text-muted);
     }
 
+    /* 탭 컨트롤 버튼 스타일 */
+    .tab-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* 피크 안내 배너 */
+    .stats-banner {
+      display: flex;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+    }
+
+    .stats-banner-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .chart-container-line {
       position: relative;
-      height: 340px;
+      height: 360px;
       width: 100%;
     }
 
     .chart-container-bar {
       position: relative;
-      height: 320px;
+      height: 330px;
       width: 100%;
     }
 
-    .dashboard-two-col {
+    /* 4. 메뉴 5종 미니 카드 그리드 */
+    .menu-detail-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 20px;
     }
 
-    /* 4. Table Styling */
+    .menu-mini-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-rank-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .rank-1 { background: #fef3c7; color: #b45309; }
+    .rank-2 { background: #f1f5f9; color: #475569; }
+    .rank-3 { background: #ffedd5; color: #c2410c; }
+    .rank-4, .rank-5 { background: #f1f5f9; color: #64748b; }
+
+    .menu-price-tag {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .menu-name-ko {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .menu-name-cn {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .menu-stats-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+
+    .stat-sublabel {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+    }
+
+    .stat-main-num {
+      font-size: 0.95rem;
+      display: block;
+    }
+
+    .menu-share-progress-bg {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .menu-share-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #2563eb);
+      border-radius: 3px;
+    }
+
+    /* 5. 요일별 테이블 & 평일/주말 비교 카드 */
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border);
     }
 
@@ -208,9 +351,10 @@
     th {
       background: #f1f5f9;
       color: #475569;
-      font-weight: 600;
+      font-weight: 700;
       padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border-dark);
+      white-space: nowrap;
     }
 
     td {
@@ -219,16 +363,18 @@
       color: #334155;
     }
 
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
     tbody tr:hover {
       background-color: #f8fafc;
     }
 
     .row-highlight {
       background-color: #fefce8 !important;
+    }
+
+    .table-total-row {
+      background: #f1f5f9;
+      font-weight: 700;
+      border-top: 2px solid var(--border-dark);
     }
 
     .cell-day {
@@ -246,27 +392,51 @@
       font-weight: 700;
     }
 
-    .day-badge.weekday {
-      background: #e2e8f0;
-      color: #334155;
-    }
+    .day-badge.weekday { background: #e2e8f0; color: #334155; }
+    .day-badge.weekend { background: #fee2e2; color: #dc2626; }
 
-    .day-badge.weekend {
-      background: #fee2e2;
-      color: #dc2626;
-    }
-
-    .day-cn {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
+    .day-cn { font-size: 0.82rem; color: var(--text-muted); }
 
     .badge-best {
       background: #fef08a;
       color: #854d0e;
       font-size: 0.72rem;
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .badge-weekend-peak {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .badge-lowest {
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 0.72rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .badge-steady {
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 0.72rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .badge-total {
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
       border-radius: 4px;
     }
 
@@ -276,9 +446,7 @@
     .font-bold { font-weight: 700; }
     .text-primary { color: var(--primary); }
 
-    .cell-share {
-      min-width: 110px;
-    }
+    .cell-share { min-width: 120px; }
 
     .share-wrapper {
       display: flex;
@@ -296,72 +464,108 @@
 
     .share-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #2563eb);
+      background: linear-gradient(90deg, #60a5fa, #2563eb);
       border-radius: 4px;
+    }
+
+    .share-bar-fill.fill-top {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
     }
 
     .share-text {
       font-size: 0.82rem;
       font-weight: 600;
       color: #475569;
-      min-width: 38px;
+      min-width: 40px;
     }
 
-    /* 5. Footer */
+    /* 평일 vs 주말 비교 카드 */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .compare-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .compare-card.compare-weekend {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    .compare-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .compare-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .premium-badge {
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 9999px;
+    }
+
+    .compare-numbers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .compare-numbers small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* 6. Footer */
     .dashboard-footer {
       text-align: center;
-      padding: 20px 0;
+      padding: 24px 0 12px 0;
       font-size: 0.85rem;
       color: #94a3b8;
     }
 
-    /* 6. Responsive */
+    /* 7. Responsive Breakpoints */
     @media (max-width: 1024px) {
-      .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .dashboard-two-col {
-        grid-template-columns: 1fr;
-      }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .menu-detail-grid { grid-template-columns: repeat(3, 1fr); }
+      .compare-container { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      body {
-        padding: 12px 8px;
-        word-break: keep-all;
-        overflow-wrap: break-word;
-      }
-      .dashboard-container {
-        gap: 16px;
-      }
-      .dashboard-header {
-        padding: 16px;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .header-title {
-        font-size: 1.25rem;
-      }
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
-      .section-card {
-        padding: 16px 12px;
-      }
-      .section-title {
-        font-size: 1rem;
-        flex-wrap: wrap;
-      }
-      .chart-container-line {
-        height: 260px;
-      }
-      .chart-container-bar {
-        height: 260px;
-      }
-      th, td {
-        padding: 8px 10px;
-        font-size: 0.82rem;
-      }
+      body { padding: 12px 8px; }
+      .dashboard-container { gap: 16px; }
+      .dashboard-header { padding: 16px; flex-direction: column; align-items: flex-start; }
+      .header-title { font-size: 1.25rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .section-card { padding: 16px 12px; }
+      .section-title { font-size: 1.05rem; }
+      .chart-container-line { height: 280px; }
+      .chart-container-bar { height: 280px; }
+      .menu-detail-grid { grid-template-columns: 1fr; }
+      th, td { padding: 8px 10px; font-size: 0.82rem; }
+      .tab-group { width: 100%; overflow-x: auto; }
+      .tab-btn { font-size: 0.75rem; padding: 5px 8px; }
     }
   </style>
 </head>
@@ -406,66 +610,113 @@
       </div>
     </section>
 
-    <!-- 3. 기능 ①: 일별 매출 꺾은선 차트 -->
+    <!-- 3. 기능 ①: 일별 매출 꺾은선 차트 (Line Chart) -->
     <section class="section-card">
       <div class="section-header">
-        <h2 class="section-title">
-          <span>📈</span> ① 일별 매출 추이 / 按日销售额折线图
-        </h2>
-        <span class="section-desc">※ 빨간 점은 주말(토/일) 피크 매출입니다. / 红色标记代表周末高峰销售额。</span>
+        <div>
+          <h2 class="section-title">
+            <span>📈</span> ① 일별 매출 추이 / 按日销售额折线图
+          </h2>
+          <span class="section-desc">30일 일자별 매출 및 수량 궤적 분석 (빨간 점: 주말 피크 / 红色圆点代表周末高峰)</span>
+        </div>
+        <!-- 뷰 전환 탭 버튼 -->
+        <div class="tab-group">
+          <button class="tab-btn line-tab-btn active" data-mode="total">전체 매출 / 总体走势</button>
+          <button class="tab-btn line-tab-btn" data-mode="menu">5대 메뉴별 비교 / 各菜单对比</button>
+          <button class="tab-btn line-tab-btn" data-mode="qty">일일 판매 수량 / 每日销售量</button>
+        </div>
       </div>
+
+      <!-- 피크 및 기준선 안내 배너 -->
+      <div class="stats-banner">
+        <div class="stats-banner-item">
+          <span>🏆 최고 단일 매출 / 单日最高:</span>
+          <strong id="statPeakDay" class="text-primary">-</strong>
+        </div>
+        <div class="stats-banner-item">
+          <span>📉 최저 단일 매출 / 单日最低:</span>
+          <strong id="statLowDay" style="color: #64748b;">-</strong>
+        </div>
+        <div class="stats-banner-item">
+          <span>📏 일평균 기준선 / 日均基准:</span>
+          <strong style="color: #d97706;">₩715,937 (점선 표시)</strong>
+        </div>
+      </div>
+
       <div class="chart-container-line">
         <canvas id="dailyRevenueChart"></canvas>
       </div>
     </section>
 
-    <!-- 4. 기능 ② & ③: 2열 레이아웃 -->
-    <div class="dashboard-two-col">
-
-      <!-- 기능 ②: 메뉴별 판매량 막대 차트 -->
-      <section class="section-card">
-        <div class="section-header">
+    <!-- 4. 기능 ②: 메뉴별 판매량 막대 차트 (Bar Chart) -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
           <h2 class="section-title">
-            <span>📊</span> ② 메뉴별 총 판매량 / 各菜单销量柱状图
+            <span>📊</span> ② 메뉴별 총 판매 실적 / 各菜单销量与销售额柱状图
           </h2>
-          <span class="section-desc">5개 대표 메뉴 누적 잔수 / 5款代表菜单累计件数</span>
+          <span class="section-desc">대표 5종 품목의 누적 잔수 및 매출 기여도 비교</span>
         </div>
-        <div class="chart-container-bar">
-          <canvas id="menuQuantityChart"></canvas>
+        <!-- 뷰 전환 탭 버튼 -->
+        <div class="tab-group">
+          <button class="tab-btn bar-tab-btn active" data-mode="qty">판매 수량 기준 (잔/개) / 按销量排行</button>
+          <button class="tab-btn bar-tab-btn" data-mode="rev">매출액 기준 (₩) / 按销售额排行</button>
         </div>
-      </section>
+      </div>
 
-      <!-- 기능 ③: 요일별 평균 매출 표 -->
-      <section class="section-card">
-        <div class="section-header">
+      <div class="chart-container-bar">
+        <canvas id="menuQuantityChart"></canvas>
+      </div>
+
+      <!-- 메뉴 5종 세부 랭킹 카드 -->
+      <div class="menu-detail-grid" id="menuDetailCards">
+        <!-- chart.js 에서 동적으로 5개 카드 생성 -->
+      </div>
+    </section>
+
+    <!-- 5. 기능 ③: 요일별 평균 매출 종합 분석 표 (Table) -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
           <h2 class="section-title">
-            <span>📋</span> ③ 요일별 평균 매출 분석 / 按星期统计均额
+            <span>📋</span> ③ 요일별 평균 매출 종합 분석 / 按星期统计均额与表现
           </h2>
-          <span class="section-desc">주말 vs 평일 매출 패턴 / 周末与工作日对比</span>
+          <span class="section-desc">요일별 영업일 수, 총매출액, 일평균 매출 및 수량, 점유율 비교 (주말 vs 평일 패턴)</span>
         </div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>요일 (星期)</th>
-                <th class="text-center">영업일 (营业天数)</th>
-                <th class="text-right">총 매출 (总销售额)</th>
-                <th class="text-right">일평균 매출 (日均销售额)</th>
-                <th>매출 비중 (占比)</th>
-              </tr>
-            </thead>
-            <tbody id="dowTableBody">
-              <!-- chart.js 에서 동적으로 행 생성 -->
-            </tbody>
-          </table>
-        </div>
-      </section>
+      </div>
 
-    </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>요일 (星期)</th>
+              <th class="text-center">영업일 (营业天数)</th>
+              <th class="text-right">총 매출 (总销售额)</th>
+              <th class="text-right">일평균 매출 (日均销售额)</th>
+              <th class="text-right">일평균 판매량 (日均销量)</th>
+              <th>매출 비중 (占比)</th>
+              <th class="text-center">특징 및 성과 (表现特征)</th>
+            </tr>
+          </thead>
+          <tbody id="dowTableBody">
+            <!-- chart.js 에서 동적으로 행 생성 -->
+          </tbody>
+          <tfoot id="dowTableFoot">
+            <!-- chart.js 에서 전체 합계 행 생성 -->
+          </tfoot>
+        </table>
+      </div>
 
-    <!-- 5. Footer -->
+      <!-- 평일 vs 주말 소계 비교 카드 -->
+      <div class="compare-container">
+        <div id="weekdayComparisonCard"></div>
+        <div id="weekendComparisonCard"></div>
+      </div>
+    </section>
+
+    <!-- 6. Footer -->
     <footer class="dashboard-footer">
-      <p>가상 동네 카페 매출 대시보드 (설치 없이 브라우저 실행 지원) · 虚构社区咖啡店销售数据仪表板 (纯静态无需安装)</p>
+      <p>가상 동네 카페 매출 대시보드 (설치 없이 브라우저 실행 지원) · 虚构社区咖啡店销售数据仪表板 (纯静态无需安装直接运行)</p>
     </footer>
 
   </div>
@@ -475,4 +726,3 @@
   <script src="chart.js"></script>
 </body>
 </html>
-
