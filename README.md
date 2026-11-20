@@ -10,6 +10,14 @@
 
 ---
 
+## 🌐 온라인 라이브 데모 (GitHub Pages) / 在线演示地址
+
+- **🔗 웹사이트 바로가기 / 线上直接访问**: [https://mazishaui-ship-it.github.io/git_tutorial/](https://mazishaui-ship-it.github.io/git_tutorial/)
+- **🇰🇷 온라인 실행 안내**: GitHub Pages를 통해 온라인으로 배포되어 있어, 별도의 다운로드나 설치 없이 위 링크를 클릭하면 PC와 모바일 브라우저에서 즉시 인터랙티브 대시보드를 체험할 수 있습니다.
+- **🇨🇳 在线访问说明**: 本项目已通过 GitHub Pages 线上部署，无需下载文件或安装任何软件，直接点击上方链接即可在 PC 或手机浏览器中实时体验完整的交互式销售数据仪表板。
+
+---
+
 ## 📂 파일 구조 및 역할 설명 / 文件结构与文件说明
 
 본 프로젝트는 별도의 웹 서버나 빌드 도구 없이 순수 프론트엔드로 동작하는 핵심 파일들로 구성되어 있습니다.  
@@ -17,8 +25,8 @@
 
 | 파일명 / 文件名 | 역할 설명 (한국어) | 说明与用途 (中文) |
 | :--- | :--- | :--- |
-| [`cafe.html`](./cafe.html) | 대시보드 메인 화면. Chart.js CDN 로드, KPI 카드, 차트 영역 및 내장 반응형 CSS 포함 | 仪表板主页面。加载 Chart.js CDN，包含核心 KPI 卡片、图表容器及内置响应式 CSS |
-| [`index.html`](./index.html) | "Hello GitHub!" 개인 소개 페이지 (한중 병기 버전) | “Hello GitHub!” 开发者个人自我介绍页面（韩中双语对照版） |
+| [`index.html`](./index.html) | 대시보드 메인 화면 및 GitHub Pages 루트 진입점. Chart.js 로드, KPI 카드, 차트 영역 및 내장 반응형 CSS 포함 | 仪表板主页面兼 GitHub Pages 默认入口。加载 Chart.js CDN，包含核心 KPI 卡片、图表容器及内置响应式 CSS |
+| [`cafe.html`](./cafe.html) | 대시보드 독립 실행 파일 (index.html과 동일한 풀 패키지 대시보드) | 仪表板独立运行文件（与 index.html 功能完全相同的大屏数据仪表板） |
 | [`data.js`](./data.js) | 30일간 5종 메뉴 판매량 및 매출 데이터 (`CAFE_SALES_DATA` 전역 변수 저장, CSV 미사용) | 30天×5款菜单销售数据（以 `CAFE_SALES_DATA` 全局变量存储，不依赖外部 CSV 文件） |
 | [`chart.js`](./chart.js) | Chart.js 꺾은선·막대 차트 생성 및 요일별 평균 매출 표 동적 렌더링 스크립트 | 负责生成 Chart.js 折线图、柱状图，并动态渲染星期均额统计表的交互脚本 |
 | [`dashboard_screenshot.png`](./dashboard_screenshot.png) | PC 브라우저 데스크톱 전경 검증 스크린샷 | PC 端桌面大屏浏览器渲染效果验证截图 |
@@ -29,18 +37,20 @@
 ## 🚀 사용 설명 및 실행 방법 / 使用说明与运行指南
 
 ### 1. 실행 전 확인 사항 / 运行前环境确认
-- **🇰🇷 설치 불필요**: Node.js, Python, Apache/Nginx 등 일체의 서버 소프트웨어나 패키지 설치가 필요 없습니다.
-- **🇨🇳 无需安装软件**: 无需安装 Node.js、Python 或任何 Web 服务器软件与构建依赖包。
+- **🇰🇷 온라인 실행**: [GitHub Pages 데모 링크](https://mazishaui-ship-it.github.io/git_tutorial/)를 클릭하면 즉시 웹에서 실행됩니다.
+- **🇨🇳 在线即开即用**: 点击 [GitHub Pages 在线演示](https://mazishaui-ship-it.github.io/git_tutorial/) 即可在网页端即时运行。
+- **🇰🇷 로컬 실행 (설치 불필요)**: Node.js, Python, Apache/Nginx 등 일체의 서버 소프트웨어나 패키지 설치 없이 `index.html` 더블 클릭으로 실행됩니다.
+- **🇨🇳 本地免安装运行**: 无需安装 Node.js、Python 或任何 Web 服务器软件，直接双击 `index.html` 即可运行。
 - **🇰🇷 인터넷 연결**: 차트 라이브러리(Chart.js)를 CDN을 통해 최초 1회 로드하므로 인터넷 연결 환경을 권장합니다.
 - **🇨🇳 网络要求**: 由于 Chart.js 核心图表库通过 CDN 加载，建议在联网环境下打开以获取完整渲染效果。
 
 ### 2. 단계별 실행 방법 / 逐步运行指南
-1. **🇰🇷 1단계 (파일 열기)**: 탐색기에서 [`cafe.html`](./cafe.html) 파일을 마우스로 **더블 클릭**합니다.
-   - **🇨🇳 步骤 1 (打开文件)**: 在文件资源管理器中直接**双击** [`cafe.html`](./cafe.html) 文件。
-2. **🇰🇷 2단계 (브라우저 확인)**: 기본 웹 브라우저(Chrome, Edge, Safari, Firefox 등)에서 대시보드가 자동으로 열립니다.
-   - **🇨🇳 步骤 2 (浏览器呈现)**: 系统默认浏览器（Chrome、Edge、Safari 等）将立即打开并展示完整仪表板。
-3. **🇰🇷 3단계 (상호작용)**: 차트 위의 데이터 포인트나 막대에 마우스 커서를 올리면 상세 툴팁(한중 병기)을 확인할 수 있습니다.
-   - **🇨🇳 步骤 3 (数据交互)**: 将鼠标悬浮在折线数据点或柱状图上，即可查看包含单价、销量与销售额的韩中双语悬浮提示。
+1. **🇰🇷 방법 A (온라인 접속)**: [https://mazishaui-ship-it.github.io/git_tutorial/](https://mazishaui-ship-it.github.io/git_tutorial/) 접속.
+   - **🇨🇳 方式 A (在线访问)**: 直接在浏览器中打开链接 [https://mazishaui-ship-it.github.io/git_tutorial/](https://mazishaui-ship-it.github.io/git_tutorial/)。
+2. **🇰🇷 방법 B (로컬 실행)**: 폴더에서 [`index.html`](./index.html) 또는 [`cafe.html`](./cafe.html) 파일을 마우스로 **더블 클릭**합니다.
+   - **🇨🇳 方式 B (本地运行)**: 在本地文件夹中直接**双击** [`index.html`](./index.html) 或 [`cafe.html`](./cafe.html) 文件。
+3. **🇰🇷 인터랙션 활용**: 차트 상단 탭 버튼(전체 매출/메뉴별 비교/판매 수량)을 클릭하여 시각화 모드를 전환하고, 데이터 포인트에 마우스를 올려 상세 툴팁을 확인합니다.
+   - **🇨🇳 交互体验**: 点击图表上方的视图切换按钮自由切换分析模式，鼠标悬浮至折线或柱体上即可查看韩中双语悬浮数据卡片。
 
 ---
 
